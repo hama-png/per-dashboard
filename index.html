@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="株PER">
+<title>株PERダッシュボード</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:#0b0e18;color:#e2e8f0;font-family:'Hiragino Sans','Noto Sans JP',sans-serif;min-height:100vh;padding-bottom:80px}
+  button{cursor:pointer;font-family:inherit}
+  input{font-family:inherit;outline:none}
+  input::placeholder{color:#3d4f66}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+  @keyframes slideIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+  #header{background:#0f1117;border-bottom:1px solid #1e2533;padding:16px 18px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50}
+  .hicon{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#3b82f6,#6366f1);display:flex;align-items:center;justify-content:center;font-size:18px}
+  .htitle{font-weight:700;font-size:16px}
+  .hsub{font-size:11px;color:#475569;margin-top:2px}
+  #refreshBtn{margin-left:auto;background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;color:#94a3b8;padding:7px 14px;font-size:13px}
+
+  #tabbar{position:fixed;bottom:0;left:0;right:0;background:#0f1117;border-top:1px solid #1e2533;display:flex;z-index:100}
+  .tab{flex:1;padding:12px 0;background:none;border:none;border-top:2px solid transparent;color:#475569;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;transition:color 0.15s}
+  .tab.active{color:#3b82f6;border-top-color:#3b82f6}
+  .tab-icon{font-size:20px}
+
+  #main{padding:16px 16px 0}
+  .page{display:none}.page.active{display:block}
+
+  .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+  .sum-card{background:#161b27;border:1px solid #1e2533;border-radius:12px;padding:12px 8px;text-align:center}
+  .sum-val{font-size:24px;font-weight:800}
+  .sum-label{font-size:11px;color:#475569;margin-top:2px}
+
+  .cards{display:grid;gap:10px}
+  .card{background:#161b27;border:1px solid #1e2533;border-radius:16px;padding:16px}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .card-name{font-weight:700;font-size:15px}
+  .card-code{font-size:11px;color:#475569;margin-top:2px}
+  .card-price{margin-top:6px;display:flex;gap:8px;align-items:center}
+  .price-val{font-size:14px;color:#cbd5e1;font-weight:600}
+  .per-badge{text-align:center}
+  .per-val{font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+  .per-unit{font-size:13px;font-weight:400}
+  .per-label{font-size:11px;padding:2px 10px;border-radius:20px;margin-top:4px;display:inline-block}
+  .diff-section{margin-top:12px;padding-top:10px;border-top:1px solid #1e2533}
+  .diff-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .diff-title{font-size:11px;color:#64748b;font-weight:600}
+  .diff-nums{font-size:12px;color:#64748b}
+  .diff-bar-wrap{display:flex;align-items:center;gap:8px}
+  .diff-bar-bg{flex:1;height:5px;background:#1e2533;border-radius:3px;overflow:hidden}
+  .diff-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+  .diff-num{font-size:13px;font-weight:700;min-width:60px;text-align:right}
+  .diff-none{font-size:11px;color:#475569}
+  .spark-wrap{display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px}
+  .spark-label{font-size:10px;color:#334155}
+  .skeleton{background:#1e2533;border-radius:10px;animation:pulse 1.4s ease-in-out infinite}
+
+  .legend{background:#161b27;border:1px solid #1e2533;border-radius:12px;padding:12px 14px;margin-top:12px}
+  .legend-title{font-size:11px;color:#475569;margin-bottom:7px}
+  .legend-items{display:flex;gap:12px;flex-wrap:wrap}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#94a3b8}
+  .legend-dot{width:7px;height:7px;border-radius:50%}
+
+  #saveBtn{width:100%;margin-top:12px;padding:15px;border-radius:14px;border:1px solid #2d3748;background:#1a1f2e;color:#94a3b8;font-weight:600;font-size:14px}
+  #saveBtn:disabled{background:#12151e;color:#334155;cursor:default}
+
+  .empty{text-align:center;padding:60px 0;color:#475569}
+  .empty-icon{font-size:40px;margin-bottom:10px}
+
+  .add-form{background:#161b27;border:1px solid #1e2533;border-radius:14px;padding:16px;margin-bottom:14px}
+  .add-title{font-weight:600;font-size:14px;margin-bottom:12px}
+  .add-input{width:100%;background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;padding:11px 14px;color:#e2e8f0;font-size:15px;margin-bottom:8px}
+  .add-btn{width:100%;padding:13px;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:15px}
+
+  .stock-list{display:grid;gap:8px}
+  .stock-item{background:#161b27;border:1px solid #1e2533;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+  .stock-info{flex:1}
+  .stock-name{font-weight:600;font-size:14px}
+  .stock-code-sm{font-size:11px;color:#475569}
+  .stock-per-sm{margin-top:4px;font-size:12px;display:flex;gap:10px}
+  .del-btn{background:#2d1b1b;color:#ef4444;border:1px solid #3d2020;border-radius:8px;padding:7px 14px;font-size:13px}
+
+  #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,0.6);z-index:999;white-space:nowrap;display:none;animation:slideIn 0.25s ease}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div class="hicon">📊</div>
+  <div>
+    <div class="htitle">株PERダッシュボード</div>
+    <div class="hsub" id="headerSub"></div>
+  </div>
+  <button id="refreshBtn" onclick="fetchAll()">🔄</button>
+</div>
+
+<div id="main">
+  <!-- ホーム -->
+  <div class="page active" id="page-home">
+    <div class="summary" id="summary" style="display:none"></div>
+    <div class="cards" id="cards"></div>
+    <div class="legend">
+      <div class="legend-title">PER 目安</div>
+      <div class="legend-items">
+        <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>&lt;10倍 割安</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>10〜20 適正</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>20〜30 やや高</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>&gt;30倍 高値</div>
+      </div>
+    </div>
+    <button id="saveBtn" onclick="saveYest()" disabled>💾 本日のPERを保存（明日の前日比に使用）</button>
+  </div>
+
+  <!-- 銘柄管理 -->
+  <div class="page" id="page-stocks">
+    <div class="add-form">
+      <div class="add-title">銘柄を追加</div>
+      <input class="add-input" id="newCode" placeholder="証券コード（例：7203）" inputmode="numeric">
+      <input class="add-input" id="newName" placeholder="銘柄名（例：トヨタ自動車）">
+      <button class="add-btn" onclick="addStock()">追加する</button>
+    </div>
+    <div class="stock-list" id="stockList"></div>
+  </div>
+</div>
+
+<div id="tabbar">
+  <button class="tab active" id="tab-home" onclick="switchTab('home')">
+    <span class="tab-icon">📊</span>ホーム
+  </button>
+  <button class="tab" id="tab-stocks" onclick="switchTab('stocks')">
+    <span class="tab-icon">➕</span>銘柄
+  </button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const MOCK_TODAY = {
+  "7203":{per:8.2,price:3421,priceChange:1.3},
+  "9984":{per:22.7,price:9876,priceChange:-0.8},
+  "6758":{per:18.4,price:13240,priceChange:2.1},
+  "6861":{per:35.1,price:68900,priceChange:0.4},
+  "4063":{per:14.8,price:5890,priceChange:-1.2},
+};
+const MOCK_YEST = {"7203":7.9,"9984":24.1,"6758":17.8,"6861":33.6,"4063":15.3};
+
+let stocks = JSON.parse(localStorage.getItem("per_stocks")||"null") || [
+  {id:1,code:"7203",name:"トヨタ自動車"},
+  {id:2,code:"9984",name:"ソフトバンクG"},
+  {id:3,code:"6758",name:"ソニーグループ"},
+];
+let perData = {};
+let storedYest = JSON.parse(localStorage.getItem("per_yest")||"{}");
+let loadingCodes = new Set();
+
+function saveStocks(){ localStorage.setItem("per_stocks",JSON.stringify(stocks)); }
+
+function perColor(p){ return p<10?"#22c55e":p<20?"#3b82f6":p<30?"#f59e0b":"#ef4444"; }
+function perLabel(p){ return p<10?"割安":p<20?"適正":p<30?"やや高":"高値"; }
+function diffColor(d){ return d>0?"#ef4444":d<0?"#22c55e":"#64748b"; }
+function diffArrow(d){ return d>0?"▲":d<0?"▼":"─"; }
+function getYest(code){ return storedYest[code]??perData[code]?.yesterdayPer??null; }
+function getDiff(code){
+  const d=perData[code]; if(!d) return null;
+  const y=getYest(code); if(y==null) return null;
+  return parseFloat((d.per-y).toFixed(2));
+}
+
+function sparklineSVG(per, code){
+  const seed = parseInt(code)||1;
+  const pts = Array.from({length:7},(_,i)=>parseFloat((per+Math.sin(seed*(i+1)*0.7)*2.5-1.2).toFixed(1)));
+  pts[6]=per;
+  const mn=Math.min(...pts)-1, mx=Math.max(...pts)+1;
+  const W=72,H=28;
+  const px=i=>(i/6)*W, py=v=>H-((v-mn)/(mx-mn))*H;
+  const d=pts.map((v,i)=>`${i===0?"M":"L"}${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(" ");
+  const c=perColor(per);
+  return `<svg width="${W}" height="${H}" style="overflow:visible"><path d="${d}" fill="none" stroke="${c}" stroke-width="1.5" stroke-linejoin="round" opacity="0.6"/><circle cx="${px(6).toFixed(1)}" cy="${py(per).toFixed(1)}" r="3" fill="${c}"/></svg>`;
+}
+
+async function fetchStock(code, name){
+  await new Promise(r=>setTimeout(r,300+Math.random()*500));
+  const t = MOCK_TODAY[code]||{per:parseFloat((Math.random()*35+5).toFixed(1)),price:Math.floor(Math.random()*8000+800),priceChange:parseFloat(((Math.random()-0.5)*4).toFixed(1))};
+  const yest = MOCK_YEST[code]??parseFloat((t.per*(1+(Math.random()-0.5)*0.08)).toFixed(1));
+  return {...t,yesterdayPer:yest,code,name};
+}
+
+async function fetchAll(){
+  perData={};
+  loadingCodes = new Set(stocks.map(s=>s.code));
+  renderCards();
+  document.getElementById("saveBtn").disabled=true;
+  for(const s of stocks){
+    try{
+      const d = await fetchStock(s.code,s.name);
+      perData[s.code]=d;
+      loadingCodes.delete(s.code);
+      renderCards();
+    }catch(e){ loadingCodes.delete(s.code); }
+  }
+  const now = new Date().toLocaleTimeString("ja-JP",{hour:"2-digit",minute:"2-digit"});
+  const today = new Date().toLocaleDateString("ja-JP",{month:"long",day:"numeric",weekday:"short"});
+  document.getElementById("headerSub").textContent = today+"　"+now+" 更新";
+  document.getElementById("saveBtn").disabled=false;
+}
+
+function renderCards(){
+  const container = document.getElementById("cards");
+  if(stocks.length===0){
+    container.innerHTML=`<div class="empty"><div class="empty-icon">📋</div>下の「銘柄」タブから追加してください</div>`;
+    document.getElementById("summary").style.display="none";
+    return;
+  }
+
+  // サマリー
+  const allLoaded = stocks.every(s=>perData[s.code]);
+  if(allLoaded){
+    const ups=stocks.filter(s=>(getDiff(s.code)??0)>0).length;
+    const downs=stocks.filter(s=>(getDiff(s.code)??0)<0).length;
+    const flat=stocks.length-ups-downs;
+    const sumEl=document.getElementById("summary");
+    sumEl.style.display="grid";
+    sumEl.innerHTML=[["PER上昇",ups,"#ef4444"],["PER低下",downs,"#22c55e"],["変わらず",flat,"#64748b"]].map(([l,v,c])=>`
+      <div class="sum-card"><div class="sum-val" style="color:${c}">${v}</div><div class="sum-label">${l}</div></div>`).join("");
+  }
+
+  container.innerHTML = stocks.map(s=>{
+    const d=perData[s.code];
+    const isLoad=loadingCodes.has(s.code);
+    const diff=getDiff(s.code);
+    const yest=getYest(s.code);
+    const pc=d?perColor(d.per):"#64748b";
+
+    const perBadge = isLoad
+      ? `<div class="skeleton" style="width:70px;height:48px"></div>`
+      : d ? `<div class="per-badge">
+          <div class="per-val" style="color:${pc}">${d.per}<span class="per-unit">倍</span></div>
+          <div class="per-label" style="color:${pc};background:${pc}22">${perLabel(d.per)}</div>
+        </div>` : "";
+
+    const priceRow = !isLoad&&d ? `<div class="card-price">
+      <span class="price-val">¥${d.price.toLocaleString()}</span>
+      <span style="font-size:12px;color:${d.priceChange>=0?"#22c55e":"#ef4444"}">${d.priceChange>=0?"▲":"▼"}${Math.abs(d.priceChange)}%</span>
+    </div>` : "";
+
+    const diffSection = !isLoad&&d ? `<div class="diff-section">
+      <div class="diff-header">
+        <span class="diff-title">PER 前日比</span>
+        <span class="diff-nums">${yest!=null?`昨日 <span style="color:#94a3b8">${yest}倍</span>　`:""} 今日 <span style="color:${pc}">${d.per}倍</span></span>
+      </div>
+      ${diff!=null?`<div class="diff-bar-wrap">
+        <div class="diff-bar-bg"><div class="diff-bar-fill" style="width:${Math.min(Math.abs(diff)/5*100,100)}%;background:${diffColor(diff)}"></div></div>
+        <span class="diff-num" style="color:${diffColor(diff)}">${diffArrow(diff)}${Math.abs(diff).toFixed(2)}倍</span>
+      </div>`:`<div class="diff-none">前日データなし（下の保存ボタンで記録）</div>`}
+    </div>` : "";
+
+    const spark = !isLoad&&d ? `<div class="spark-wrap"><span class="spark-label">7日推移（模擬）</span>${sparklineSVG(d.per,s.code)}</div>` : "";
+
+    return `<div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">${s.name}</div>
+          <div class="card-code">${s.code}</div>
+          ${priceRow}
+        </div>
+        ${perBadge}
+      </div>
+      ${diffSection}
+      ${spark}
+    </div>`;
+  }).join("");
+}
+
+function renderStockList(){
+  const el=document.getElementById("stockList");
+  if(stocks.length===0){ el.innerHTML=`<div style="text-align:center;padding:40px 0;color:#475569">銘柄が未登録です</div>`; return; }
+  el.innerHTML=stocks.map(s=>{
+    const d=perData[s.code];
+    const diff=getDiff(s.code);
+    const perInfo=d?`<div class="stock-per-sm">
+      <span style="color:${perColor(d.per)}">PER ${d.per}倍</span>
+      ${diff!=null?`<span style="color:${diffColor(diff)}">${diffArrow(diff)}${Math.abs(diff).toFixed(2)}倍</span>`:""}
+    </div>`:"";
+    return `<div class="stock-item">
+      <div class="stock-info">
+        <span class="stock-name">${s.name}</span> <span class="stock-code-sm">${s.code}</span>
+        ${perInfo}
+      </div>
+      <button class="del-btn" onclick="removeStock('${s.code}')">削除</button>
+    </div>`;
+  }).join("");
+}
+
+function addStock(){
+  const code=document.getElementById("newCode").value.trim();
+  const name=document.getElementById("newName").value.trim();
+  if(!code||!name) return;
+  if(stocks.find(s=>s.code===code)){ showToast("すでに登録済みです","warn"); return; }
+  stocks.push({id:Date.now(),code,name});
+  saveStocks();
+  document.getElementById("newCode").value="";
+  document.getElementById("newName").value="";
+  showToast(name+" を追加しました");
+  renderStockList();
+  renderCards();
+}
+
+function removeStock(code){
+  stocks=stocks.filter(s=>s.code!==code);
+  delete perData[code];
+  saveStocks();
+  renderStockList();
+  renderCards();
+}
+
+function saveYest(){
+  const snap={};
+  for(const k of Object.keys(perData)) snap[k]=perData[k].per;
+  localStorage.setItem("per_yest",JSON.stringify(snap));
+  storedYest=snap;
+  showToast("本日のPERを保存しました ✓");
+}
+
+let toastTimer;
+function showToast(msg, type="ok"){
+  const el=document.getElementById("toast");
+  el.textContent=msg;
+  const colors={ok:{bg:"#0d1f2e",border:"#1a3060",color:"#60a5fa"},warn:{bg:"#2d260d",border:"#4d3a0d",color:"#fbbf24"},err:{bg:"#2d1b1b",border:"#4d2020",color:"#ef4444"}};
+  const c=colors[type]||colors.ok;
+  el.style.cssText=`position:fixed;bottom:90px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,0.6);z-index:999;white-space:nowrap;animation:slideIn 0.25s ease;background:${c.bg};border:1px solid ${c.border};color:${c.color};display:block`;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.style.display="none",2800);
+}
+
+function switchTab(name){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.getElementById("page-"+name).classList.add("active");
+  document.getElementById("tab-"+name).classList.add("active");
+  if(name==="stocks") renderStockList();
+}
+
+// 初期化
+fetchAll();
+</script>
+</body>
+</html>
