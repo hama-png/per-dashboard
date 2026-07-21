@@ -7,6 +7,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="株PER">
 <title>株PER</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%230a2016'/%3E%3Ctext x='90' y='148' font-family='Orbitron,monospace' font-size='68' font-weight='900' fill='%2322c55e' text-anchor='middle' textLength='158' lengthAdjust='spacingAndGlyphs' transform='scale(1,1.55) translate(0,-52)'%3EPER%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:#0b0e18;color:#e2e8f0;font-family:'Hiragino Sans','Noto Sans JP',sans-serif;height:100dvh;overflow:hidden;display:flex;flex-direction:column}
@@ -70,7 +72,6 @@ input::placeholder{color:#3d4f66}
 
 .empty{text-align:center;padding:40px 0;color:#475569;font-size:13px}
 #toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1e2533;color:#e2e8f0;padding:9px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:300;display:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
-.err-banner{background:#2d1b1b;border:1px solid #4d2020;border-radius:8px;padding:10px 12px;font-size:12px;color:#fca5a5;margin-bottom:8px;line-height:1.6}
 
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -125,7 +126,6 @@ input::placeholder{color:#3d4f66}
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-settings')">✕</button>
     <div class="modal-title">設定</div>
-
     <div class="setting-row">
       <div><div class="setting-label">カードサイズ</div><div class="setting-sub">1画面の銘柄数を調整</div></div>
       <div class="seg" id="seg-size">
@@ -141,11 +141,9 @@ input::placeholder{color:#3d4f66}
         <button class="seg-btn" data-spark="off" onclick="setSpark('off')">OFF</button>
       </div>
     </div>
-
     <div style="margin-top:18px;margin-bottom:10px;font-weight:700;font-size:14px">ページ管理</div>
     <div id="page-list"></div>
     <button class="mbtn mbtn-gray" onclick="openAddPage()">＋ ページを追加</button>
-
     <div style="margin-top:18px;margin-bottom:10px;font-weight:700;font-size:14px">銘柄一覧</div>
     <div id="stock-list-settings"></div>
   </div>
@@ -165,14 +163,12 @@ input::placeholder{color:#3d4f66}
 <div id="toast"></div>
 
 <script>
-// ── CONFIG ─────────────────────────────────────────────
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxfSf6YlucVLMbyx7Ft4b0C7e6RIr4oV8l0WmTf-wUoNBLLugT4lnTLvnTNQDfSW63zgw/exec";
+const GAS_URL="https://script.google.com/macros/s/AKfycbxfSf6YlucVLMbyx7Ft4b0C7e6RIr4oV8l0WmTf-wUoNBLLugT4lnTLvnTNQDfSW63zgw/exec";
 
-// ── STATE ──────────────────────────────────────────────
 function load(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
 function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
 
-let state = load("per_state2") || {
+let state=load("per_state2")||{
   pages:[
     {id:1,name:"保有銘柄",stocks:[{code:"7203",name:"トヨタ自動車"},{code:"9984",name:"ソフトバンクG"},{code:"6758",name:"ソニーグループ"}]},
     {id:2,name:"注目銘柄",stocks:[{code:"6861",name:"キーエンス"},{code:"4063",name:"信越化学"}]},
@@ -180,72 +176,53 @@ let state = load("per_state2") || {
   size:"medium",
   spark:true,
 };
-let perData = {};
-let yesterdayPer = load("per_yest") || {};
-let currentPage = 0;
-let isFetching = false;
+let perData={};
+let yesterdayPer=load("per_yest")||{};
+let currentPage=0;
+let isFetching=false;
 
 function saveState(){save("per_state2",state)}
 
-// ── COLORS ─────────────────────────────────────────────
-function perColor(p){
-  if(p==null) return "#64748b";
-  return p<15?"#22c55e":p<=25?"#60a5fa":"#ef4444";
-}
+function perColor(p){if(p==null)return"#64748b";return p<15?"#22c55e":p<=25?"#60a5fa":"#ef4444"}
 function diffColor(d){return d>0?"#22c55e":d<0?"#ef4444":"#64748b"}
 function diffArrow(d){return d>0?"▲":d<0?"▼":"─"}
 function getYest(code){return yesterdayPer[code]??null}
 function getDiff(code){
-  const d=perData[code]; if(!d||d.per==null) return null;
-  const y=getYest(code); if(y==null) return null;
+  const d=perData[code];if(!d||d.per==null)return null;
+  const y=getYest(code);if(y==null)return null;
   return parseFloat((d.per-y).toFixed(2));
 }
 
-// ── FETCH ──────────────────────────────────────────────
 async function refresh(){
-  if(isFetching) return;
+  if(isFetching)return;
   isFetching=true;
-  document.getElementById("headerSub").innerHTML=`<span class="spinner"></span>取得中...`;
-  perData={};
-  renderAll();
-
+  document.getElementById("headerSub").innerHTML='<span class="spinner"></span>取得中...';
+  perData={};renderAll();
   const allCodes=[...new Set(state.pages.flatMap(p=>p.stocks.map(s=>s.code)))];
   if(allCodes.length===0){
     document.getElementById("headerSub").textContent="銘柄を追加してください";
-    isFetching=false; return;
+    isFetching=false;return;
   }
-
   try{
-    const url=GAS_URL+"?codes="+allCodes.join(",");
-    const res=await fetch(url);
-    if(!res.ok) throw new Error("HTTP "+res.status);
+    const res=await fetch(GAS_URL+"?codes="+allCodes.join(","));
+    if(!res.ok)throw new Error("HTTP "+res.status);
     const json=await res.json();
-
     for(const code of allCodes){
-      if(json[code] && !json[code].error){
-        perData[code]=json[code];
-      } else {
-        perData[code]={error:true};
-      }
+      perData[code]=(json[code]&&!json[code].error)?json[code]:{error:true};
     }
     const now=new Date().toLocaleTimeString("ja-JP",{hour:"2-digit",minute:"2-digit"});
     document.getElementById("headerSub").textContent=now+" 更新（Yahoo!ファイナンス）";
-  } catch(e){
-    document.getElementById("headerSub").textContent="取得エラー："+e.message;
-    showToast("データ取得に失敗しました","err");
+  }catch(e){
+    document.getElementById("headerSub").textContent="取得エラー";
+    showToast("データ取得に失敗しました");
   }
-
-  isFetching=false;
-  renderAll();
+  isFetching=false;renderAll();
 }
 
-// ── SPARKLINE ──────────────────────────────────────────
 function sparkSVG(per,code,w,h){
   const seed=parseInt(code)||1;
-  // 実データがない日はperを基点にした模擬値
   const hist=load("per_hist_"+code)||[];
-  const pts=hist.length>=7?hist.slice(-7):Array.from({length:7},(_,i)=>
-    parseFloat((per+Math.sin(seed*(i+1)*0.7)*1.5-0.8).toFixed(1)));
+  const pts=hist.length>=7?hist.slice(-7):Array.from({length:7},(_,i)=>parseFloat((per+Math.sin(seed*(i+1)*0.7)*1.5-0.8).toFixed(1)));
   pts[pts.length-1]=per;
   const mn=Math.min(...pts)-0.5,mx=Math.max(...pts)+0.5;
   const px=i=>(i/(pts.length-1))*w;
@@ -253,10 +230,9 @@ function sparkSVG(per,code,w,h){
   const d=pts.map((v,i)=>`${i===0?"M":"L"}${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(" ");
   const diff=getDiff(code);
   const c=diff==null?perColor(per):diffColor(diff);
-  return `<svg width="${w}" height="${h}" style="overflow:visible;display:block"><path d="${d}" fill="none" stroke="${c}" stroke-width="1.5" stroke-linejoin="round" opacity="0.85"/><circle cx="${px(pts.length-1).toFixed(1)}" cy="${py(per).toFixed(1)}" r="2.5" fill="${c}"/></svg>`;
+  return `<svg width="${w}" height="${h}" style="overflow:visible;display:block"><path d="${d}" fill="none" stroke="${c}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><circle cx="${px(pts.length-1).toFixed(1)}" cy="${py(per).toFixed(1)}" r="2.5" fill="${c}"/></svg>`;
 }
 
-// ── SIZE CONFIG ────────────────────────────────────────
 function sizeConf(){
   return{
     large: {fs:15,perFs:22,codeFs:11,diffFs:13,pad:"10px 12px",gap:8,sparkW:64,sparkH:28,showCode:true},
@@ -265,11 +241,7 @@ function sizeConf(){
   }[state.size];
 }
 
-// ── RENDER ─────────────────────────────────────────────
-function renderAll(){
-  renderTabs();
-  renderPages();
-}
+function renderAll(){renderTabs();renderPages()}
 
 function renderTabs(){
   document.getElementById("pageTabs").innerHTML=
@@ -286,7 +258,7 @@ function renderPages(){
     const sc=sizeConf();
     if(page.stocks.length===0){
       div.innerHTML=`<div class="empty">銘柄を追加してください<br><small style="font-size:11px;margin-top:6px;display:block">下の「➕」から追加</small></div>`;
-    } else {
+    }else{
       div.innerHTML=`<div class="grid" style="gap:${sc.gap}px">${page.stocks.map(s=>stockCard(s,sc)).join("")}</div>`;
     }
     wrap.appendChild(div);
@@ -296,7 +268,7 @@ function renderPages(){
 function stockCard(s,sc){
   const d=perData[s.code];
   const diff=getDiff(s.code);
-  const isLoading=!d && isFetching;
+  const isLoading=!d&&isFetching;
   const hasError=d&&d.error;
   const pc=d&&!hasError?perColor(d.per):"#64748b";
   const dc=diff!=null?diffColor(diff):"#64748b";
@@ -307,15 +279,15 @@ function stockCard(s,sc){
   if(isLoading){
     perEl=`<span class="skel" style="width:50px;height:${sc.perFs}px;margin-top:3px;display:block"></span>`;
     diffEl=`<span class="skel" style="width:32px;height:${sc.diffFs}px"></span>`;
-  } else if(hasError){
+  }else if(hasError){
     perEl=`<span style="font-size:${sc.diffFs}px;color:#ef4444">取得失敗</span>`;
     diffEl="";
-  } else if(d){
+  }else if(d){
     perEl=`<span style="font-size:${sc.perFs}px;font-weight:800;color:${pc};font-variant-numeric:tabular-nums;line-height:1;display:block;margin-top:2px">${d.per!=null?d.per:"--"}<span style="font-size:${Math.round(sc.perFs*0.55)}px;font-weight:400">倍</span></span>`;
     diffEl=diff!=null
       ?`<span style="font-size:${sc.diffFs}px;font-weight:700;color:${dc}">${diffArrow(diff)}${Math.abs(diff).toFixed(1)}</span>`
       :`<span style="font-size:${sc.diffFs-1}px;color:#334155">--</span>`;
-  } else {
+  }else{
     perEl=`<span style="font-size:${sc.diffFs}px;color:#334155">--</span>`;
     diffEl="";
   }
@@ -323,24 +295,19 @@ function stockCard(s,sc){
   const spark=d&&!hasError&&d.per!=null&&state.spark?`<div>${sparkSVG(d.per,s.code,sc.sparkW,sc.sparkH)}</div>`:"";
 
   return `<div class="card" style="padding:${sc.pad};border-left-color:${pc}">
-    <div class="card-left" style="min-width:0;flex:1">
-      ${nameEl}${perEl}
-    </div>
+    <div class="card-left" style="min-width:0;flex:1">${nameEl}${perEl}</div>
     <div class="card-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-      ${spark}
-      <div style="text-align:right;min-width:36px">${diffEl}</div>
+      ${spark}<div style="text-align:right;min-width:36px">${diffEl}</div>
     </div>
   </div>`;
 }
 
-// ── NAVIGATION ─────────────────────────────────────────
 function switchPage(i){currentPage=i;renderAll()}
 function switchMainTab(t){
   document.querySelectorAll(".bnav").forEach(b=>b.classList.remove("active"));
   document.getElementById("bnav-"+t).classList.add("active");
 }
 
-// ── MODALS ─────────────────────────────────────────────
 function openModal(id){document.getElementById(id).classList.add("open")}
 function closeModal(id){document.getElementById(id).classList.remove("open")}
 
@@ -360,11 +327,8 @@ function addStock(){
   if(!code||!name){showToast("コードと銘柄名を入力してください");return}
   if(state.pages[pi].stocks.find(s=>s.code===code)){showToast("すでに登録済みです");return}
   state.pages[pi].stocks.push({code,name});
-  saveState();
-  closeModal("modal-add");
-  renderAll();
+  saveState();closeModal("modal-add");renderAll();
   showToast(name+" を追加しました");
-  // 新銘柄だけ個別取得
   fetch(GAS_URL+"?codes="+code).then(r=>r.json()).then(j=>{
     if(j[code]&&!j[code].error){perData[code]=j[code];renderAll();}
   }).catch(()=>{});
@@ -380,11 +344,9 @@ function addPage(){
   const name=document.getElementById("newpage-name").value.trim();
   if(!name){showToast("ページ名を入力してください");return}
   state.pages.push({id:Date.now(),name,stocks:[]});
-  saveState();
-  closeModal("modal-addpage");
+  saveState();closeModal("modal-addpage");
   currentPage=state.pages.length-1;
-  renderAll();
-  showToast(name+" ページを追加しました");
+  renderAll();showToast(name+" ページを追加しました");
 }
 
 function openSettings(){
@@ -426,14 +388,12 @@ function deleteStock(pi,code){
   saveState();openSettings();renderAll();
 }
 
-// ── SAVE YESTERDAY ─────────────────────────────────────
 function saveYest(){
   const codes=Object.keys(perData).filter(k=>perData[k]&&!perData[k].error&&perData[k].per!=null);
   if(codes.length===0){showToast("先にデータを取得してください");return}
   const snap={};
-  codes.forEach(k=>snap[k]=perData[k].per);
-  // 履歴保存（スパークライン用）
   codes.forEach(k=>{
+    snap[k]=perData[k].per;
     const hist=load("per_hist_"+k)||[];
     hist.push(perData[k].per);
     if(hist.length>30)hist.shift();
@@ -445,7 +405,6 @@ function saveYest(){
   renderAll();
 }
 
-// ── TOAST ──────────────────────────────────────────────
 let _tt;
 function showToast(msg){
   const el=document.getElementById("toast");
@@ -453,7 +412,6 @@ function showToast(msg){
   clearTimeout(_tt);_tt=setTimeout(()=>el.style.display="none",2500);
 }
 
-// ── INIT ───────────────────────────────────────────────
 renderAll();
 refresh();
 </script>
