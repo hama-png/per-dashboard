@@ -14,96 +14,72 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 input,select{font-family:inherit;outline:none}
 input::placeholder{color:#3d4f66}
 
-/* ── HEADER ── */
 #header{background:#0f1117;border-bottom:1px solid #1e2533;padding:8px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0}
 #headerTitle{font-weight:700;font-size:14px;flex:1}
-#headerSub{font-size:10px;color:#475569}
+#headerSub{font-size:10px;color:#475569;margin-top:1px}
 .hbtn{color:#64748b;font-size:18px;padding:4px 6px}
 
-/* ── PAGE TABS ── */
 #pageTabs{display:flex;background:#0f1117;border-bottom:1px solid #1e2533;overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch}
 #pageTabs::-webkit-scrollbar{display:none}
 .pageTab{padding:8px 14px;font-size:12px;font-weight:600;color:#475569;white-space:nowrap;border-bottom:2px solid transparent;flex-shrink:0}
 .pageTab.active{color:#60a5fa;border-bottom-color:#60a5fa}
 .pageTab-add{padding:8px 12px;color:#475569;font-size:16px;flex-shrink:0}
 
-/* ── MAIN SCROLL AREA ── */
 #pagesWrap{flex:1;overflow:hidden;position:relative}
 .pageContent{position:absolute;inset:0;overflow-y:auto;padding:8px 10px;display:none}
 .pageContent.active{display:block}
 .pageContent::-webkit-scrollbar{display:none}
 
-/* ── STOCK GRID ── */
-.grid{display:grid;gap:6px}
-
-/* ── STOCK CARD ── */
+.grid{display:grid}
 .card{background:#161b27;border-radius:10px;padding:7px 10px;display:flex;align-items:center;gap:8px;border-left:3px solid transparent}
 .card-left{flex:1;min-width:0}
-.card-name{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-code{color:#475569;margin-left:5px}
-.card-per{font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
-.card-unit{font-weight:400}
 .card-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.diff-badge{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
 
-/* ── MINI SPARKLINE ── */
-.spark{flex-shrink:0}
-
-/* ── BOTTOM NAV ── */
 #bottomNav{background:#0f1117;border-top:1px solid #1e2533;display:flex;flex-shrink:0}
 .bnav{flex:1;padding:8px 0;color:#475569;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:2px;border-top:2px solid transparent}
 .bnav.active{color:#60a5fa;border-top-color:#60a5fa}
 .bnav-icon{font-size:18px}
 
-/* ── MODAL ── */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:flex-end}
 .modal-bg.open{display:flex}
 .modal{background:#161b27;border-radius:18px 18px 0 0;width:100%;padding:20px 18px 36px;max-height:85vh;overflow-y:auto}
 .modal-title{font-weight:700;font-size:16px;margin-bottom:16px}
 .modal-close{float:right;color:#64748b;font-size:20px;line-height:1}
 .minp{width:100%;background:#0f1117;border:1px solid #2d3748;border-radius:10px;padding:10px 13px;color:#e2e8f0;font-size:15px;margin-bottom:10px}
-.mselect{width:100%;background:#0f1117;border:1px solid #2d3748;border-radius:10px;padding:10px 13px;color:#e2e8f0;font-size:15px;margin-bottom:10px;appearance:none}
-.mbtn{width:100%;padding:13px;border-radius:10px;font-weight:700;font-size:15px;color:#fff;margin-top:4px}
+.mselect{width:100%;background:#0f1117;border:1px solid #2d3748;border-radius:10px;padding:10px 13px;color:#e2e8f0;font-size:15px;margin-bottom:10px;-webkit-appearance:none}
+.mbtn{width:100%;padding:13px;border-radius:10px;font-weight:700;font-size:15px;color:#fff;margin-top:4px;border:none;cursor:pointer}
 .mbtn-primary{background:linear-gradient(135deg,#3b82f6,#6366f1)}
-.mbtn-danger{background:#7f1d1d;color:#fca5a5;margin-top:8px}
 .mbtn-gray{background:#1e2533;color:#94a3b8;margin-top:8px}
-.mlabel{font-size:12px;color:#64748b;margin-bottom:6px;font-weight:600}
-.mrow{display:flex;gap:8px;margin-bottom:10px}
-.mrow .minp{margin-bottom:0}
+.mlabel{font-size:12px;color:#64748b;margin-bottom:6px;font-weight:600;display:block}
 
-/* ── SETTINGS ── */
 .setting-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #1e2533}
-.setting-label{font-size:14px}
+.setting-label{font-size:14px;font-weight:600}
 .setting-sub{font-size:11px;color:#475569;margin-top:2px}
 .seg{display:flex;background:#0f1117;border-radius:8px;padding:2px;gap:2px}
-.seg-btn{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;color:#64748b;transition:all 0.15s}
+.seg-btn{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;color:#64748b;transition:all 0.15s;border:none;cursor:pointer;background:none}
 .seg-btn.active{background:#1e2533;color:#e2e8f0}
 
-/* ── STOCK LIST (settings) ── */
 .slist-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #1e2533;gap:10px}
 .slist-info{flex:1;min-width:0}
 .slist-name{font-size:14px;font-weight:600}
 .slist-code{font-size:11px;color:#475569}
-.slist-del{color:#ef4444;font-size:20px;padding:0 4px}
-
-/* ── PAGE LIST ── */
+.slist-del{color:#ef4444;font-size:20px;padding:0 4px;background:none;border:none;cursor:pointer}
 .plist-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #1e2533;gap:10px}
 .plist-name{flex:1;font-size:14px;font-weight:600}
-.plist-del{color:#ef4444;font-size:20px;padding:0 4px}
+.plist-del{color:#ef4444;font-size:20px;padding:0 4px;background:none;border:none;cursor:pointer}
 
-/* ── EMPTY ── */
 .empty{text-align:center;padding:40px 0;color:#475569;font-size:13px}
-
-/* ── TOAST ── */
 #toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1e2533;color:#e2e8f0;padding:9px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:300;display:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+.err-banner{background:#2d1b1b;border:1px solid #4d2020;border-radius:8px;padding:10px 12px;font-size:12px;color:#fca5a5;margin-bottom:8px;line-height:1.6}
 
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
 .skel{background:#1e2533;border-radius:4px;animation:pulse 1.4s ease-in-out infinite;display:inline-block}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid #334155;border-top-color:#60a5fa;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:4px}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div id="header">
   <div style="font-size:16px">📊</div>
   <div style="flex:1">
@@ -114,13 +90,9 @@ input::placeholder{color:#3d4f66}
   <button class="hbtn" onclick="openSettings()">⚙️</button>
 </div>
 
-<!-- PAGE TABS -->
 <div id="pageTabs"></div>
-
-<!-- PAGES -->
 <div id="pagesWrap"></div>
 
-<!-- BOTTOM NAV -->
 <div id="bottomNav">
   <button class="bnav active" id="bnav-home" onclick="switchMainTab('home')">
     <span class="bnav-icon">📊</span>ホーム
@@ -133,38 +105,37 @@ input::placeholder{color:#3d4f66}
   </button>
 </div>
 
-<!-- ADD STOCK MODAL -->
+<!-- ADD STOCK -->
 <div class="modal-bg" id="modal-add">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-add')">✕</button>
     <div class="modal-title">銘柄を追加</div>
-    <div class="mlabel">追加するページ</div>
+    <label class="mlabel">追加するページ</label>
     <select class="mselect" id="add-page"></select>
-    <div class="mlabel">証券コード</div>
-    <input class="minp" id="add-code" placeholder="例：7203" inputmode="numeric">
-    <div class="mlabel">銘柄名</div>
+    <label class="mlabel">証券コード（4桁）</label>
+    <input class="minp" id="add-code" placeholder="例：7203" inputmode="numeric" maxlength="4">
+    <label class="mlabel">銘柄名</label>
     <input class="minp" id="add-name" placeholder="例：トヨタ自動車">
     <button class="mbtn mbtn-primary" onclick="addStock()">追加する</button>
   </div>
 </div>
 
-<!-- SETTINGS MODAL -->
+<!-- SETTINGS -->
 <div class="modal-bg" id="modal-settings">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-settings')">✕</button>
     <div class="modal-title">設定</div>
 
     <div class="setting-row">
-      <div><div class="setting-label">カードサイズ</div><div class="setting-sub">1画面に表示する銘柄数</div></div>
+      <div><div class="setting-label">カードサイズ</div><div class="setting-sub">1画面の銘柄数を調整</div></div>
       <div class="seg" id="seg-size">
         <button class="seg-btn" data-size="large" onclick="setSize('large')">大</button>
         <button class="seg-btn" data-size="medium" onclick="setSize('medium')">中</button>
         <button class="seg-btn" data-size="small" onclick="setSize('small')">小</button>
       </div>
     </div>
-
-    <div class="setting-row" style="border-bottom:none">
-      <div><div class="setting-label">スパークライン</div><div class="setting-sub">7日推移グラフを表示</div></div>
+    <div class="setting-row">
+      <div><div class="setting-label">スパークライン</div><div class="setting-sub">7日推移グラフ</div></div>
       <div class="seg" id="seg-spark">
         <button class="seg-btn" data-spark="on" onclick="setSpark('on')">ON</button>
         <button class="seg-btn" data-spark="off" onclick="setSpark('off')">OFF</button>
@@ -180,12 +151,12 @@ input::placeholder{color:#3d4f66}
   </div>
 </div>
 
-<!-- ADD PAGE MODAL -->
+<!-- ADD PAGE -->
 <div class="modal-bg" id="modal-addpage">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-addpage')">✕</button>
     <div class="modal-title">ページを追加</div>
-    <div class="mlabel">ページ名</div>
+    <label class="mlabel">ページ名</label>
     <input class="minp" id="newpage-name" placeholder="例：保有銘柄">
     <button class="mbtn mbtn-primary" onclick="addPage()">追加する</button>
   </div>
@@ -194,87 +165,104 @@ input::placeholder{color:#3d4f66}
 <div id="toast"></div>
 
 <script>
-// ── STATE ──────────────────────────────────────────────
-const MOCK = {
-  "7203":{per:8.2,price:3421,chg:1.3},
-  "9984":{per:22.7,price:9876,chg:-0.8},
-  "6758":{per:18.4,price:13240,chg:2.1},
-  "6861":{per:35.1,price:68900,chg:0.4},
-  "4063":{per:14.8,price:5890,chg:-1.2},
-  "6367":{per:28.3,price:24800,chg:0.9},
-  "8306":{per:11.2,price:1876,chg:-0.3},
-};
-const MOCK_YEST={"7203":7.9,"9984":24.1,"6758":17.8,"6861":33.6,"4063":15.3,"6367":27.1,"8306":11.8};
+// ── CONFIG ─────────────────────────────────────────────
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxfSf6YlucVLMbyx7Ft4b0C7e6RIr4oV8l0WmTf-wUoNBLLugT4lnTLvnTNQDfSW63zgw/exec";
 
-let state = load("per_state") || {
+// ── STATE ──────────────────────────────────────────────
+function load(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
+function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
+
+let state = load("per_state2") || {
   pages:[
     {id:1,name:"保有銘柄",stocks:[{code:"7203",name:"トヨタ自動車"},{code:"9984",name:"ソフトバンクG"},{code:"6758",name:"ソニーグループ"}]},
-    {id:2,name:"注目銘柄",stocks:[{code:"6861",name:"キーエンス"},{code:"4063",name:"信越化学"},{code:"6367",name:"ダイキン工業"},{code:"8306",name:"三菱UFJ"}]},
+    {id:2,name:"注目銘柄",stocks:[{code:"6861",name:"キーエンス"},{code:"4063",name:"信越化学"}]},
   ],
   size:"medium",
   spark:true,
 };
-let perData={};
-let yesterdayPer = load("per_yest")||{};
-let currentPage=0;
-let currentMainTab="home";
+let perData = {};
+let yesterdayPer = load("per_yest") || {};
+let currentPage = 0;
+let isFetching = false;
 
-function load(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
-function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
-function saveState(){save("per_state",state)}
+function saveState(){save("per_state2",state)}
 
 // ── COLORS ─────────────────────────────────────────────
-function perColor(p){return p<15?"#22c55e":p<=25?"#60a5fa":"#ef4444"}
-function diffColor(d){return d>0?"#22c55e":d<0?"#ef4444":"#64748b"}  // 上昇=緑, 下落=赤
+function perColor(p){
+  if(p==null) return "#64748b";
+  return p<15?"#22c55e":p<=25?"#60a5fa":"#ef4444";
+}
+function diffColor(d){return d>0?"#22c55e":d<0?"#ef4444":"#64748b"}
 function diffArrow(d){return d>0?"▲":d<0?"▼":"─"}
-
-function getYest(code){return yesterdayPer[code]??perData[code]?.yest??null}
+function getYest(code){return yesterdayPer[code]??null}
 function getDiff(code){
-  const d=perData[code];if(!d)return null;
-  const y=getYest(code);if(y==null)return null;
+  const d=perData[code]; if(!d||d.per==null) return null;
+  const y=getYest(code); if(y==null) return null;
   return parseFloat((d.per-y).toFixed(2));
 }
 
-// ── MOCK FETCH ─────────────────────────────────────────
-async function fetchStock(code){
-  await new Promise(r=>setTimeout(r,200+Math.random()*400));
-  const m=MOCK[code]||{per:parseFloat((Math.random()*40+5).toFixed(1)),price:Math.floor(Math.random()*8000+500),chg:parseFloat(((Math.random()-0.5)*4).toFixed(1))};
-  const yest=MOCK_YEST[code]??parseFloat((m.per*(1+(Math.random()-0.5)*0.08)).toFixed(1));
-  return{per:m.per,price:m.price,chg:m.chg,yest};
-}
-
+// ── FETCH ──────────────────────────────────────────────
 async function refresh(){
+  if(isFetching) return;
+  isFetching=true;
+  document.getElementById("headerSub").innerHTML=`<span class="spinner"></span>取得中...`;
   perData={};
   renderAll();
-  const codes=[...new Set(state.pages.flatMap(p=>p.stocks.map(s=>s.code)))];
-  await Promise.all(codes.map(async code=>{
-    try{perData[code]=await fetchStock(code);}catch{}
-    renderAll();
-  }));
-  const now=new Date().toLocaleTimeString("ja-JP",{hour:"2-digit",minute:"2-digit"});
-  document.getElementById("headerSub").textContent=now+" 更新";
+
+  const allCodes=[...new Set(state.pages.flatMap(p=>p.stocks.map(s=>s.code)))];
+  if(allCodes.length===0){
+    document.getElementById("headerSub").textContent="銘柄を追加してください";
+    isFetching=false; return;
+  }
+
+  try{
+    const url=GAS_URL+"?codes="+allCodes.join(",");
+    const res=await fetch(url);
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const json=await res.json();
+
+    for(const code of allCodes){
+      if(json[code] && !json[code].error){
+        perData[code]=json[code];
+      } else {
+        perData[code]={error:true};
+      }
+    }
+    const now=new Date().toLocaleTimeString("ja-JP",{hour:"2-digit",minute:"2-digit"});
+    document.getElementById("headerSub").textContent=now+" 更新（Yahoo!ファイナンス）";
+  } catch(e){
+    document.getElementById("headerSub").textContent="取得エラー："+e.message;
+    showToast("データ取得に失敗しました","err");
+  }
+
+  isFetching=false;
+  renderAll();
 }
 
 // ── SPARKLINE ──────────────────────────────────────────
 function sparkSVG(per,code,w,h){
   const seed=parseInt(code)||1;
-  const pts=Array.from({length:7},(_,i)=>parseFloat((per+Math.sin(seed*(i+1)*0.7)*2-1).toFixed(1)));
-  pts[6]=per;
+  // 実データがない日はperを基点にした模擬値
+  const hist=load("per_hist_"+code)||[];
+  const pts=hist.length>=7?hist.slice(-7):Array.from({length:7},(_,i)=>
+    parseFloat((per+Math.sin(seed*(i+1)*0.7)*1.5-0.8).toFixed(1)));
+  pts[pts.length-1]=per;
   const mn=Math.min(...pts)-0.5,mx=Math.max(...pts)+0.5;
-  const px=i=>(i/6)*w,py=v=>h-((v-mn)/(mx-mn))*h;
+  const px=i=>(i/(pts.length-1))*w;
+  const py=v=>h-((v-mn)/(mx-mn))*h;
   const d=pts.map((v,i)=>`${i===0?"M":"L"}${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(" ");
   const diff=getDiff(code);
-  const c=diff==null?"#64748b":diffColor(diff);
-  return `<svg width="${w}" height="${h}" style="overflow:visible;display:block"><path d="${d}" fill="none" stroke="${c}" stroke-width="1.5" stroke-linejoin="round" opacity="0.8"/><circle cx="${px(6).toFixed(1)}" cy="${py(per).toFixed(1)}" r="2.5" fill="${c}"/></svg>`;
+  const c=diff==null?perColor(per):diffColor(diff);
+  return `<svg width="${w}" height="${h}" style="overflow:visible;display:block"><path d="${d}" fill="none" stroke="${c}" stroke-width="1.5" stroke-linejoin="round" opacity="0.85"/><circle cx="${px(pts.length-1).toFixed(1)}" cy="${py(per).toFixed(1)}" r="2.5" fill="${c}"/></svg>`;
 }
 
 // ── SIZE CONFIG ────────────────────────────────────────
 function sizeConf(){
   return{
-    large: {fs:15,perFs:22,codeFs:11,diffFs:13,pad:"9px 11px",gap:8,sparkW:60,sparkH:26,showCode:true},
-    medium:{fs:13,perFs:19,codeFs:10,diffFs:12,pad:"7px 10px",gap:6,sparkW:52,sparkH:22,showCode:true},
-    small: {fs:11,perFs:16,codeFs:0, diffFs:11,pad:"5px 9px", gap:5,sparkW:44,sparkH:18,showCode:false},
-  }[state.size]||{};
+    large: {fs:15,perFs:22,codeFs:11,diffFs:13,pad:"10px 12px",gap:8,sparkW:64,sparkH:28,showCode:true},
+    medium:{fs:13,perFs:19,codeFs:10,diffFs:12,pad:"7px 10px",gap:6,sparkW:54,sparkH:22,showCode:true},
+    small: {fs:11,perFs:15,codeFs:0, diffFs:11,pad:"5px 9px", gap:4,sparkW:44,sparkH:18,showCode:false},
+  }[state.size];
 }
 
 // ── RENDER ─────────────────────────────────────────────
@@ -284,19 +272,17 @@ function renderAll(){
 }
 
 function renderTabs(){
-  const el=document.getElementById("pageTabs");
-  el.innerHTML=state.pages.map((p,i)=>`<button class="pageTab${i===currentPage?" active":""}" onclick="switchPage(${i})">${p.name}</button>`).join("")
+  document.getElementById("pageTabs").innerHTML=
+    state.pages.map((p,i)=>`<button class="pageTab${i===currentPage?" active":""}" onclick="switchPage(${i})">${p.name}</button>`).join("")
     +`<button class="pageTab-add" onclick="openAddPage()">＋</button>`;
 }
 
 function renderPages(){
   const wrap=document.getElementById("pagesWrap");
-  // remove old
   wrap.innerHTML="";
   state.pages.forEach((page,pi)=>{
     const div=document.createElement("div");
     div.className="pageContent"+(pi===currentPage?" active":"");
-    div.id="page-"+pi;
     const sc=sizeConf();
     if(page.stocks.length===0){
       div.innerHTML=`<div class="empty">銘柄を追加してください<br><small style="font-size:11px;margin-top:6px;display:block">下の「➕」から追加</small></div>`;
@@ -310,41 +296,46 @@ function renderPages(){
 function stockCard(s,sc){
   const d=perData[s.code];
   const diff=getDiff(s.code);
-  const pc=d?perColor(d.per):"#64748b";
+  const isLoading=!d && isFetching;
+  const hasError=d&&d.error;
+  const pc=d&&!hasError?perColor(d.per):"#64748b";
   const dc=diff!=null?diffColor(diff):"#64748b";
 
-  const nameRow=`<span style="font-size:${sc.fs}px;font-weight:700">${s.name}</span>${sc.showCode?`<span style="font-size:${sc.codeFs}px;color:#475569;margin-left:4px">${s.code}</span>`:""}`;
+  const nameEl=`<span style="font-size:${sc.fs}px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;max-width:160px">${s.name}</span>${sc.showCode?`<span style="font-size:${sc.codeFs}px;color:#475569">${s.code}</span>`:""}`;
 
-  const perStr=d?`<span style="font-size:${sc.perFs}px;font-weight:800;color:${pc};font-variant-numeric:tabular-nums">${d.per}<span style="font-size:${sc.perFs*0.6}px;font-weight:400">倍</span></span>`
-    :`<span class="skel" style="width:40px;height:${sc.perFs}px"></span>`;
+  let perEl,diffEl;
+  if(isLoading){
+    perEl=`<span class="skel" style="width:50px;height:${sc.perFs}px;margin-top:3px;display:block"></span>`;
+    diffEl=`<span class="skel" style="width:32px;height:${sc.diffFs}px"></span>`;
+  } else if(hasError){
+    perEl=`<span style="font-size:${sc.diffFs}px;color:#ef4444">取得失敗</span>`;
+    diffEl="";
+  } else if(d){
+    perEl=`<span style="font-size:${sc.perFs}px;font-weight:800;color:${pc};font-variant-numeric:tabular-nums;line-height:1;display:block;margin-top:2px">${d.per!=null?d.per:"--"}<span style="font-size:${Math.round(sc.perFs*0.55)}px;font-weight:400">倍</span></span>`;
+    diffEl=diff!=null
+      ?`<span style="font-size:${sc.diffFs}px;font-weight:700;color:${dc}">${diffArrow(diff)}${Math.abs(diff).toFixed(1)}</span>`
+      :`<span style="font-size:${sc.diffFs-1}px;color:#334155">--</span>`;
+  } else {
+    perEl=`<span style="font-size:${sc.diffFs}px;color:#334155">--</span>`;
+    diffEl="";
+  }
 
-  const diffStr=diff!=null
-    ?`<span style="font-size:${sc.diffFs}px;font-weight:700;color:${dc}">${diffArrow(diff)}${Math.abs(diff).toFixed(1)}</span>`
-    :d?`<span style="font-size:${sc.diffFs-1}px;color:#475569">--</span>`
-    :`<span class="skel" style="width:28px;height:${sc.diffFs}px"></span>`;
-
-  const spark=d&&state.spark?sparkSVG(d.per,s.code,sc.sparkW,sc.sparkH):"";
+  const spark=d&&!hasError&&d.per!=null&&state.spark?`<div>${sparkSVG(d.per,s.code,sc.sparkW,sc.sparkH)}</div>`:"";
 
   return `<div class="card" style="padding:${sc.pad};border-left-color:${pc}">
-    <div class="card-left">
-      <div>${nameRow}</div>
-      <div style="margin-top:2px">${perStr}</div>
+    <div class="card-left" style="min-width:0;flex:1">
+      ${nameEl}${perEl}
     </div>
-    <div class="card-right">
-      ${spark?`<div class="spark">${spark}</div>`:""}
-      <div style="text-align:right">${diffStr}</div>
+    <div class="card-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+      ${spark}
+      <div style="text-align:right;min-width:36px">${diffEl}</div>
     </div>
   </div>`;
 }
 
 // ── NAVIGATION ─────────────────────────────────────────
-function switchPage(i){
-  currentPage=i;
-  renderAll();
-}
-
+function switchPage(i){currentPage=i;renderAll()}
 function switchMainTab(t){
-  currentMainTab=t;
   document.querySelectorAll(".bnav").forEach(b=>b.classList.remove("active"));
   document.getElementById("bnav-"+t).classList.add("active");
 }
@@ -371,9 +362,12 @@ function addStock(){
   state.pages[pi].stocks.push({code,name});
   saveState();
   closeModal("modal-add");
-  if(pi===currentPage) renderAll();
+  renderAll();
   showToast(name+" を追加しました");
-  fetchStock(code).then(d=>{perData[code]=d;renderAll();}).catch(()=>{});
+  // 新銘柄だけ個別取得
+  fetch(GAS_URL+"?codes="+code).then(r=>r.json()).then(j=>{
+    if(j[code]&&!j[code].error){perData[code]=j[code];renderAll();}
+  }).catch(()=>{});
 }
 
 function openAddPage(){
@@ -394,61 +388,57 @@ function addPage(){
 }
 
 function openSettings(){
-  // size seg
   document.querySelectorAll("#seg-size .seg-btn").forEach(b=>b.classList.toggle("active",b.dataset.size===state.size));
   document.querySelectorAll("#seg-spark .seg-btn").forEach(b=>b.classList.toggle("active",b.dataset.spark===(state.spark?"on":"off")));
-  // page list
   document.getElementById("page-list").innerHTML=state.pages.map((p,i)=>`
     <div class="plist-item">
       <span class="plist-name">${p.name}</span>
       ${state.pages.length>1?`<button class="plist-del" onclick="deletePage(${i})">🗑</button>`:""}
     </div>`).join("");
-  // stock list
   document.getElementById("stock-list-settings").innerHTML=state.pages.flatMap((p,pi)=>
     p.stocks.map(s=>`<div class="slist-item">
       <div class="slist-info"><div class="slist-name">${s.name}</div><div class="slist-code">${p.name} · ${s.code}</div></div>
       <button class="slist-del" onclick="deleteStock(${pi},'${s.code}')">🗑</button>
     </div>`)
-  ).join("") || `<div class="empty">銘柄がありません</div>`;
+  ).join("")||`<div class="empty">銘柄がありません</div>`;
   openModal("modal-settings");
 }
 
 function setSize(s){
-  state.size=s;
-  saveState();
+  state.size=s;saveState();
   document.querySelectorAll("#seg-size .seg-btn").forEach(b=>b.classList.toggle("active",b.dataset.size===s));
   renderAll();
 }
-
 function setSpark(s){
-  state.spark=s==="on";
-  saveState();
+  state.spark=s==="on";saveState();
   document.querySelectorAll("#seg-spark .seg-btn").forEach(b=>b.classList.toggle("active",b.dataset.spark===s));
   renderAll();
 }
-
 function deletePage(i){
   if(state.pages.length<=1){showToast("最低1ページ必要です");return}
   if(!confirm(`「${state.pages[i].name}」を削除しますか？`))return;
   state.pages.splice(i,1);
   if(currentPage>=state.pages.length)currentPage=state.pages.length-1;
-  saveState();
-  closeModal("modal-settings");
-  renderAll();
+  saveState();closeModal("modal-settings");renderAll();
 }
-
 function deleteStock(pi,code){
   state.pages[pi].stocks=state.pages[pi].stocks.filter(s=>s.code!==code);
-  saveState();
-  openSettings();
-  renderAll();
+  saveState();openSettings();renderAll();
 }
 
 // ── SAVE YESTERDAY ─────────────────────────────────────
 function saveYest(){
-  if(Object.keys(perData).length===0){showToast("先にデータを取得してください");return}
+  const codes=Object.keys(perData).filter(k=>perData[k]&&!perData[k].error&&perData[k].per!=null);
+  if(codes.length===0){showToast("先にデータを取得してください");return}
   const snap={};
-  for(const k of Object.keys(perData))snap[k]=perData[k].per;
+  codes.forEach(k=>snap[k]=perData[k].per);
+  // 履歴保存（スパークライン用）
+  codes.forEach(k=>{
+    const hist=load("per_hist_"+k)||[];
+    hist.push(perData[k].per);
+    if(hist.length>30)hist.shift();
+    save("per_hist_"+k,hist);
+  });
   save("per_yest",snap);
   yesterdayPer=snap;
   showToast("本日のPERを保存しました ✓");
